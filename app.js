@@ -3,9 +3,20 @@ const app = express();
 require('dotenv').config();
 const cors = require('cors');
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://register-task-frontend.vercel.app',
+];
+
 app.use(
   cors({
-    origin: 'https://register-task-frontend.vercel.app',
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 );
